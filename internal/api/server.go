@@ -17,6 +17,8 @@ func NewHTTPServer(router *gin.Engine, userController *controller.UserController
 	{
 		user.POST("/create", userController.Create)
 		user.GET("/find-by-pk/:pk", userController.FindByPk)
+		user.POST("/update", userController.Update)
+		user.POST("/delete", userController.Delete)
 	}
 
 	return &HTTPServer{

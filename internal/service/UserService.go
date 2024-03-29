@@ -7,7 +7,7 @@ import (
 
 type UserService interface {
 	Create(createUserRequest *dto.CreateUserRequest) error
-	// Update(user model.User) error
+	Update(user *dto.UpdateUserRequest) error
 	FindByPk(pk int) (*dao.User, error)
-	// Delete(user model.User) error
+	Delete(user *dto.DeleteUserRequest) error
 }

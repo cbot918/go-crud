@@ -29,6 +29,16 @@ func (u *UserServiceImpl) Create(createUserRequest *dto.CreateUserRequest) error
 	return nil
 }
 
+func (u *UserServiceImpl) Update(user *dto.UpdateUserRequest) error {
+
+	u.db.
+		Model(&dao.User{}).
+		Where("id=?", user.Id).
+		Updates(dao.User{Password: user.Password})
+
+	return nil
+}
+
 func (u *UserServiceImpl) FindByPk(pk int) (*dao.User, error) {
 	user := dao.User{}
 
@@ -41,6 +51,9 @@ func (u *UserServiceImpl) FindByPk(pk int) (*dao.User, error) {
 	return &user, nil
 }
 
-// func (u *UserServiceImpl) Update(user model.User) error
+func (u *UserServiceImpl) Delete(user *dto.DeleteUserRequest) error {
 
-// func (u *UserServiceImpl) Delete(user model.User) error
+	u.db.Delete(&dao.User{}, user.Id)
+
+	return nil
+}

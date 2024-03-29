@@ -25,14 +25,15 @@ func NewUserController(userService service.UserService) *UserController {
 func (u *UserController) Create(ctx *gin.Context) {
 	userRequest := &dto.CreateUserRequest{}
 	// Bind the JSON body to the user struct
-	if err := ctx.BindJSON(&userRequest); err != nil {
+	err := ctx.BindJSON(&userRequest)
+	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
 	util.PrintJSON(userRequest)
 
-	err := u.userService.Create(userRequest)
+	err = u.userService.Create(userRequest)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, ErrorResponse(err))
 		return
@@ -62,6 +63,38 @@ func (u *UserController) FindByPk(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, user)
 }
 
-// func (u *UserController) Update(user model.User) error
+func (u *UserController) Update(ctx *gin.Context) {
+	userRequest := &dto.UpdateUserRequest{}
 
-// func (u *UserController) Delete(user model.User) error
+	err := ctx.BindJSON(&userRequest)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	err = u.userService.Update(userRequest)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, map[string]string{"msg": "update ok"})
+}
+
+func (u *UserController) Delete(ctx *gin.Context) {
+	userRequest := &dto.DeleteUserRequest{}
+
+	err := ctx.BindJSON(&userRequest)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	err = u.userService.Delete(userRequest)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, map[string]string{"msg": "delete ok"})
+}
