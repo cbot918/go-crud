@@ -5,6 +5,7 @@ import (
 	"app/internal/api"
 	"app/internal/api/controller"
 	"app/internal/configs"
+	"app/internal/repository"
 	"log"
 
 	"app/internal/service"
@@ -32,11 +33,12 @@ func main() {
 	}
 
 	// init controller / service
-	userService := service.NewUserServiceImpl(database)
-	userController := controller.NewUserController(userService)
+	repository := repository.NewRepository(database)
+	service := service.NewService(repository)
+	controller := controller.NewController(service)
 
 	// init server
-	server := api.NewHTTPServer(gin.Default(), userController)
+	server := api.NewHTTPServer(gin.Default(), controller)
 
 	// run server
 	err = server.Router.Run(":" + config.Server.Port)
